@@ -61,12 +61,12 @@ public class AllTests {
     suite.addTestSuite(BoundProviderTest.class);
     suite.addTestSuite(CircularDependencyTest.class);
     suite.addTestSuite(DuplicateBindingsTest.class);
-    // ErrorHandlingTest.class is not a testcase
     suite.addTestSuite(EagerSingletonTest.class);
     suite.addTestSuite(GenericInjectionTest.class);
     suite.addTestSuite(ImplicitBindingTest.class);
     suite.addTestSuite(InjectorTest.class);
     suite.addTestSuite(JitBindingsTest.class);
+    suite.addTestSuite(Java8LanguageFeatureBindingTest.class);
     suite.addTestSuite(KeyTest.class);
     suite.addTestSuite(LoggerInjectionTest.class);
     suite.addTestSuite(MembersInjectorTest.class);

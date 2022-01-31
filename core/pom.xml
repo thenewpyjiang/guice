@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.google.inject</groupId>
     <artifactId>guice-parent</artifactId>
-    <version>5.0.2-SNAPSHOT</version>
+    <version>5.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>guice</artifactId>
@@ -45,12 +45,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava-testlib</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-      <version>3.0.5.RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -95,7 +89,6 @@
           -->
           <excludes>
             <exclude>**/*$*</exclude>
-            <exclude>**/ErrorHandlingTest*</exclude>
             <exclude>**/OSGiContainerTest*</exclude>
             <exclude>**/ScopesTest*</exclude>
             <exclude>**/TypeConversionTest*</exclude>
