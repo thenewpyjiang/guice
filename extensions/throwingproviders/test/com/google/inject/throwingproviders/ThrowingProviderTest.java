@@ -44,12 +44,11 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.rmi.AccessException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TooManyListenersException;
+import java.util.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -850,25 +849,28 @@ public class ThrowingProviderTest {
           });
       fail();
     } catch (CreationException ce) {
-      // The only two that should fail are Interrupted & TooManyListeners.. the rest are OK.
-      List<Message> errors = ImmutableList.copyOf(ce.getErrorMessages());
-      assertEquals(
-          InterruptedException.class.getName()
-              + " is not compatible with the exceptions (["
-              + RemoteException.class
-              + "]) declared in the CheckedProvider interface ("
-              + RemoteProvider.class.getName()
-              + ")",
-          errors.get(0).getMessage());
-      assertEquals(
-          TooManyListenersException.class.getName()
-              + " is not compatible with the exceptions (["
-              + RemoteException.class
-              + "]) declared in the CheckedProvider interface ("
-              + RemoteProvider.class.getName()
-              + ")",
-          errors.get(1).getMessage());
-      assertEquals(2, errors.size());
+        // The only two that should fail are Interrupted & TooManyListeners.. the rest are OK.
+        List<Message> errors = ImmutableList.copyOf(ce.getErrorMessages());
+
+        String expected;
+        expected = InterruptedException.class.getName()
+                + " is not compatible with the exceptions (["
+                + RemoteException.class
+                + "]) declared in the CheckedProvider interface ("
+                + RemoteProvider.class.getName()
+                + ")";
+        assertTrue(expected.equals(errors.get(0).getMessage())
+                || expected.equals(errors.get(1).getMessage()));
+        expected = TooManyListenersException.class.getName()
+                + " is not compatible with the exceptions (["
+                + RemoteException.class
+                + "]) declared in the CheckedProvider interface ("
+                + RemoteProvider.class.getName()
+                + ")";
+        assertTrue(expected.equals(errors.get(0).getMessage())
+                || expected.equals(errors.get(1).getMessage()));
+
+        assertEquals(2, errors.size());
     }
   }
 
@@ -967,11 +969,18 @@ public class ThrowingProviderTest {
           });
       fail();
     } catch (CreationException ce) {
-      assertEquals(
-          ManyMethods.class.getName()
-              + " may not declare any new methods, but declared "
-              + Arrays.asList(ManyMethods.class.getDeclaredMethods()),
-          Iterables.getOnlyElement(ce.getErrorMessages()).getMessage());
+        String message = Iterables.getOnlyElement(ce.getErrorMessages()).getMessage();
+        List<Method> list = Arrays.asList(ManyMethods.class.getDeclaredMethods());
+        List<Method> reversedList = new ArrayList<>();
+        reversedList.add(list.get(1));
+        reversedList.add(list.get(0));
+
+        assertTrue((ManyMethods.class.getName()
+                + " may not declare any new methods, but declared "
+                + list).equals(message)
+            || (ManyMethods.class.getName()
+                + " may not declare any new methods, but declared "
+                + reversedList).equals(message));
     }
   }
 
